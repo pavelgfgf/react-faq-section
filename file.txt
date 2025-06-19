@@ -1,0 +1,64 @@
+// components/CategoryFilter.jsx
+import { Button } from "@/components/ui/button";
+import { categories } from "../data/faqData";
+
+export const CategoryFilter = ({ category, setCategory }) => (
+  <div className="flex gap-2 flex-wrap mb-6">
+    {categories.map((cat) => (
+      <Button
+        key={cat}
+        variant={cat === category ? "default" : "outline"}
+        onClick={() => setCategory(cat)}
+        className="rounded-full"
+      >
+        {cat}
+      </Button>
+    ))}
+  </div>
+);
+
+
+// components/FAQHeader.jsx
+export const FAQHeader = () => (
+  <header className="text-center mb-8">
+    <h1 className="text-4xl font-bold mb-2">Часто задаваемые вопросы</h1>
+  </header>
+);
+
+
+// components/Footer.jsx
+export const Footer = () => (
+  <footer className="mt-12 text-center text-gray-500 text-sm">
+    © 2025 FAQ 3D Project. Все права защищены.
+  </footer>
+);
+
+
+// pages/FAQApp.jsx
+import { useState } from "react";
+import { FAQ_DATA } from "../data/faqData";
+import { FAQHeader } from "../components/FAQHeader";
+import { CategoryFilter } from "../components/CategoryFilter";
+import { FAQ3DPanel } from "../components/FAQ3DPanel";
+import { FAQList } from "../components/FAQList";
+import { Footer } from "../components/Footer";
+
+export default function FAQApp() {
+  const [category, setCategory] = useState("Все");
+
+  const filteredFAQs =
+    category === "Все"
+      ? FAQ_DATA
+      : FAQ_DATA.filter((faq) => faq.category === category);
+
+  return (
+    <div className="min-h-screen p-6 max-w-7xl mx-auto flex flex-col">
+      <FAQHeader />
+      <CategoryFilter category={category} setCategory={setCategory} />
+      <FAQ3DPanel>
+        <FAQList data={filteredFAQs} />
+      </FAQ3DPanel>
+      <Footer />
+    </div>
+  );
+}
