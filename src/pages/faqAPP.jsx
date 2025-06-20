@@ -5,19 +5,29 @@ import { CategoryFilter } from "../components/categoryFilter";
 import { FAQ3DPanel } from "../components/faqPanel";
 import { FAQList } from "../components/faqlist";
 import { Footer } from "../components/Footer";
+import FAQForm from "../components/FAQForm";
 
 export default function FAQApp() {
   const [category, setCategory] = useState("Все");
+  const [faqs, setFaqs] = useState(FAQ_DATA);
+
+  const handleAddFAQ = (newFAQ) => {
+    setFaqs((prev) => [...prev, newFAQ]);
+  };
 
   const filteredFAQs =
     category === "Все"
-      ? FAQ_DATA
-      : FAQ_DATA.filter((faq) => faq.category === category);
+      ? faqs
+      : faqs.filter((faq) => faq.category === category);
 
   return (
     <div className="min-h-screen p-6 max-w-7xl mx-auto flex flex-col">
       <FAQHeader />
       <CategoryFilter category={category} setCategory={setCategory} />
+      <FAQForm
+        onAdd={handleAddFAQ}
+        categories={["Все", ...new Set(faqs.map((item) => item.category))]}
+      />
       <FAQ3DPanel>
         <FAQList data={filteredFAQs} />
       </FAQ3DPanel>
